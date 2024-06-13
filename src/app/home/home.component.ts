@@ -7,11 +7,13 @@ import Task from '../../db/db';
 import { Observable } from 'rxjs';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TaskCardComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TaskCardComponent],
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
@@ -21,11 +23,10 @@ export class HomeComponent {
   totalTasks:number = 0;
   totalPages:number[] = [1];
   defaultDue: string = DateTime.now().plus({hours: 1}).toISO().slice(0,16);
+  filter!:string;
+  filterOptions:string[] = ["All", "Pending", "Completed", "Expired"];
+
   currentPage!: number;
-  // @Input()
-  // set p(page:number){
-  //   this.currentPage = page;
-  // }
 
   taskForm = new FormGroup({
     name: new FormControl(''),
@@ -43,30 +44,39 @@ export class HomeComponent {
 
     this.todoHandler.addTask(name, DateTime.fromISO(due).toJSDate());
 
-    this.todoHandler.retrieveTasks(this.currentPage).then((data: Task[]) => {
-      this.tasks = [...data];
+    this.todoHandler.retrieveTasks(this.currentPage).then((data) => {
+      this.tasks = [...data.tasks];
+      this.totalPages = Array.from(Array(Math.ceil(data.pages / 10)).keys());
     });
 
     return;
   }
 
+  selectFilter(){
+    window.location.href = `/?p=1&f=${this.filter}`;
+  }
+
   reloadData(){
-    // console.log("Callback from child component!")
-    this.todoHandler.retrieveTasks(this.currentPage).then((data: Task[]) => {
-      this.tasks = [...data];
+    this.todoHandler.retrieveTasks(this.currentPage).then((data) => {
+      this.tasks = [...data.tasks];
+      this.totalPages = Array.from(Array(Math.ceil(data.pages / 10)).keys());
     });
   }
 
   constructor(){
-    this.todoHandler.retrieveTotal().then(count => {
-      this.totalTasks = count;
-      this.totalPages = Array.from(Array(Math.ceil(count / 10)).keys());
-    });
   }
   
   @Input()
+  set f(filter:string){
+    this.filter = filter ?? "all"; 
+  }
+
+  @Input()
   set p(page:number){
     this.currentPage = page;
-    this.todoHandler.retrieveTasks(this.currentPage).then((data: Task[]) => this.tasks = [...data]);
+    this.todoHandler.retrieveTasks(this.currentPage, this.filter).then((data) => {
+      this.tasks = [...data.tasks]
+      this.totalPages = Array.from(Array(Math.ceil(data.pages / 10)).keys());
+    });
   }
 }
