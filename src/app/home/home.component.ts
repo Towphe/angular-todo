@@ -5,13 +5,14 @@ import {DateTime} from "luxon";
 import Todo from '../models/Todo';
 import Task from '../../db/db';
 import { Observable } from 'rxjs';
+import { TaskCardComponent } from '../task-card/task-card.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ReactiveFormsModule],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  imports: [CommonModule, ReactiveFormsModule, TaskCardComponent],
+  templateUrl: './home.component.html'
 })
 export class HomeComponent {
   todoHandler: TodoHandlerService = inject(TodoHandlerService);
@@ -34,14 +35,17 @@ export class HomeComponent {
       // null value | raise exception
       return;
     }
-    
+
     this.todoHandler.addTask(name, DateTime.fromISO(due).toJSDate());
+
+    this.todoHandler.retrieveTasks().then((data: Task[]) => {
+      this.tasks = [...data];
+    });
 
     return;
   }
   constructor(){
     this.todoHandler.retrieveTasks().then((data: Task[]) => {
-      
       this.tasks = [...data];
     });
   }

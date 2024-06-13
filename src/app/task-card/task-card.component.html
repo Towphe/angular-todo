@@ -1,0 +1,12 @@
+<div class="w-full bg-gray-200 px-4 py-2 text-md">
+    <p class="font-bold text-lg">{{task.name}}</p>
+    @if (isPassDue()){
+        <p>Due {{getRelativeDate()}}</p>
+    }
+    @else {
+        <p>Due in {{getRelativeDate()}}</p>
+    }
+    <p>{{task.status.toUpperCase()}}</p>
+    <button class="{{isPassDue() == true || task.status == 'completed' ? 'bg-gray-400 hover:cursor-not-allowed' : 'bg-green-500  hover:opacity-75'}} w-full mt-2 text-lg text-slate-100 font-semibold rounded-md" type="button" (click)="markAsDone()" [disabled]="isPassDue() && task.status != 'completed'">Mark as Done</button>
+    <button class="{{isPassDue() == true || task.status == 'completed' ? 'bg-gray-400 hover:cursor-not-allowed' : 'bg-red-500  hover:opacity-75'}} w-full mt-2 text-lg text-slate-100 font-semibold rounded-md" type="button" (click)="markAsCancelled()" [disabled]="isPassDue() && task.status != 'completed'">Cancel</button>
+</div>
