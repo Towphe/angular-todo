@@ -1,4 +1,16 @@
-<main class="w-screen">
-    <h1 class="text-3xl text-center">TodoList</h1>
-    
+<main class="w-screen py-4">
+    <h1 class="text-3xl text-center font-bold">TodoList</h1>
+    <form class="mx-auto w-4/5 px-4 py-6 bg-gray-200 shadow-md mt-6 rounded-lg" [formGroup]="taskForm" (submit)="addTask()">
+        <label class="block">Task name</label>
+        <input class="block w-full indent-2 py-0.5" type="text" formControlName="name" placeholder="Study Angular!" />
+        <label class="block mt-2">Due</label>
+        <input class="block w-full text-center py-0.5" type="datetime-local" formControlName="due" />
+        <button class="bg-green-500 w-full mt-4 py-1 text-slate-100 font-bold rounded-md hover:opacity-75" type="submit">Add</button>
+    </form>
+    <div>
+        <!-- filter -->
+    </div>
+    <div>
+        <!-- results container -->
+    </div>
 </main>
