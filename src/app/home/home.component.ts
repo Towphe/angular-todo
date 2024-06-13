@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { TodoHandlerService } from '../services/todo-handler.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {DateTime} from "luxon";
@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
+
   todoHandler: TodoHandlerService = inject(TodoHandlerService);
   
   tasks:Task[] = [];
@@ -44,6 +45,14 @@ export class HomeComponent {
 
     return;
   }
+
+  reloadData(){
+    // console.log("Callback from child component!")
+    this.todoHandler.retrieveTasks().then((data: Task[]) => {
+      this.tasks = [...data];
+    });
+  }
+
   constructor(){
     this.todoHandler.retrieveTasks().then((data: Task[]) => {
       this.tasks = [...data];

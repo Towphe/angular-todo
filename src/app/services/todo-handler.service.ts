@@ -28,6 +28,26 @@ export class TodoHandlerService {
     return;
   }
 
+  async markTaskDone(taskId: number | undefined){
+    if (!taskId){
+      return;
+    }
+    await db.tasks.update(taskId, {
+      status: 'completed'
+    });
+    return;
+  }
+
+  async markTaskCancelled(taskId: number | undefined){
+    if (!taskId){
+      return;
+    }
+    await db.tasks.update(taskId, {
+      status: 'cancelled'
+    });
+    return;
+  }
+
   constructor() {
   }
 }
