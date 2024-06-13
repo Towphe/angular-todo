@@ -52,6 +52,10 @@ export class HomeComponent {
     return;
   }
 
+  generatePageHref(p:number){
+    return `/?p=${p}&f=${this.filter}`;
+  }
+
   selectFilter(){
     window.location.href = `/?p=1&f=${this.filter}`;
   }

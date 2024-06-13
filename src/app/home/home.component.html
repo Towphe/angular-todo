@@ -20,7 +20,7 @@
     <div class="flex justify-center gap-2 mt-6 text-md font-light">
         <!-- pagination -->
         @for (page of totalPages; track $index) {
-            <a class="block" href="?p={{page+1}}">{{page + 1}}</a>
+            <a class="block" href="{{generatePageHref(page+1)}}">{{page + 1}}</a>
         }
     </div>
 </main>
