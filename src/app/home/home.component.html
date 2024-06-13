@@ -14,4 +14,10 @@
         <!-- results container -->
         <app-task-card (onStatusChange)="reloadData()" class="w-full" *ngFor="let task of tasks" [task]="task"></app-task-card>
     </div>
+    <div class="flex justify-center gap-2 mt-6 text-md font-light">
+        <!-- pagination -->
+        @for (page of totalPages; track $index) {
+            <a class="block" href="?p={{page+1}}">{{page + 1}}</a>
+        }
+    </div>
 </main>

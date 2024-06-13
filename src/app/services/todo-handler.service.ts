@@ -13,7 +13,12 @@ export class TodoHandlerService {
   // use IndexedDB for this later
   
   async retrieveTasks(p:number=1, c:number=10){
+    console.log(p);
     return await db.tasks.offset((p-1)*c).limit(c).toArray();
+  }
+
+  async retrieveTotal() {
+    return await db.tasks.count();
   }
 
   async addTask(taskName:string, dueDate:Date){
