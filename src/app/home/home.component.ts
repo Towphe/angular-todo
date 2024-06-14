@@ -1,13 +1,10 @@
-import { Component, EventEmitter, Output, inject, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { TodoHandlerService } from '../services/todo-handler.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {DateTime} from "luxon";
-import Todo from '../models/Todo';
 import Task from '../../db/db';
-import { Observable } from 'rxjs';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -25,6 +22,8 @@ export class HomeComponent {
   defaultDue: string = DateTime.now().plus({hours: 1}).toISO().slice(0,16);
   filter!:string;
   filterOptions:string[] = ["All", "Pending", "Completed", "Expired"];
+  renderEditPopup:boolean = false;
+  taskToEditId!:number;
 
   currentPage!: number;
 
@@ -65,6 +64,28 @@ export class HomeComponent {
       this.tasks = [...data.tasks];
       this.totalPages = Array.from(Array(Math.ceil(data.pages / 10)).keys());
     });
+  }
+
+  editTaskForm = new FormGroup({
+    name: new FormControl(),
+    due: new FormControl()
+  });
+
+  promptEditTask(task: Task){
+    let oldDue = DateTime.fromJSDate(task.due).toISO()?.slice(0, 16);
+    this.editTaskForm.setValue({name: task.name, due: oldDue});
+    this.taskToEditId = task.id ?? 0;
+    this.renderEditPopup = true;
+  }
+
+  closeEditTaskPrompt(){
+    this.renderEditPopup = false;
+  }  
+
+  editTask(){
+    this.todoHandler.editTask(this.taskToEditId, this.editTaskForm.value.name, DateTime.fromISO(this.editTaskForm.value.due).toJSDate());
+    this.renderEditPopup = false;
+    document.location.reload();
   }
 
   constructor(){

@@ -12,6 +12,7 @@ import { TodoHandlerService } from '../services/todo-handler.service';
 })
 export class TaskCardComponent {
   @Output() onStatusChange: EventEmitter<any> = new EventEmitter();
+  @Output() taskEditPrompt: EventEmitter<Task> = new EventEmitter();
   @Input() task!: Task;
   todoHandler: TodoHandlerService = inject(TodoHandlerService);
   
@@ -30,6 +31,10 @@ export class TaskCardComponent {
   markAsCancelled(){
     this.todoHandler.markTaskCancelled(this.task.id);
     this.onStatusChange.emit();
+  }
+
+  editTask(){
+    this.taskEditPrompt.emit(this.task);
   }
 
   getRelativeDate(){

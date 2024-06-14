@@ -59,6 +59,14 @@ export class TodoHandlerService {
     return;
   }
 
+  async editTask(taskId:number, newTaskName:string, newTaskDue:Date){
+    alert(newTaskDue);
+    await db.tasks.update(taskId, {
+      "name": newTaskName,
+      "due" : newTaskDue
+    });
+  }
+
   async markTaskCancelled(taskId: number | undefined){
     if (!taskId){
       return;
