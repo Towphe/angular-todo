@@ -1,11 +1,14 @@
 <main class="w-screen py-4 relative">
     <h1 class="text-3xl text-center font-bold {{renderEditPopup == true ? 'opacity-40' : 'opacity-100'}}">TodoList</h1>
-    <form class="mx-auto w-4/5 px-4 py-6 bg-gray-200 shadow-md mt-6 rounded-lg  {{renderEditPopup == true ? 'opacity-40' : 'opacity-100'}}" [formGroup]="taskForm" (submit)="addTask()">
+    <form class="mx-auto w-4/5 px-4 pt-6 pb-2 bg-gray-200 shadow-md mt-6 rounded-lg  {{renderEditPopup == true ? 'opacity-40' : 'opacity-100'}}" [formGroup]="taskForm" (submit)="addTask()">
         <label class="block">Task name</label>
         <input class="block w-full indent-2 py-0.5" type="text" formControlName="name" placeholder="Study Angular!" />
         <label class="block mt-2">Due</label>
         <input class="block w-full text-center py-0.5" type="datetime-local" formControlName="due" />
         <button class="bg-green-500 w-full mt-4 py-1 text-slate-100 font-bold rounded-md hover:opacity-75" type="submit">Add</button>
+        <div class="w-full flex justify-end">
+            <a class="font-light mt-1 hover:opacity-75" href="/settings">Settings</a>
+        </div>
     </form>
     <div class="mt-6 w-4/5 mx-auto {{renderEditPopup == true ? 'opacity-40' : 'opacity-100'}}">
         <!-- filter -->
@@ -23,6 +26,7 @@
             <a class="block" href="{{generatePageHref(page+1)}}">{{page + 1}}</a>
         }
     </div>
+    <!-- Edit popup -->
     @if(renderEditPopup){
         <div class="z-10 absolute top-0 w-screen h-screen flex justify-center items-center">
             <form class="mx-auto w-4/5 px-4 py-6 bg-gray-200 shadow-md mt-6 rounded-lg" [formGroup]="editTaskForm" (submit)="editTask()">

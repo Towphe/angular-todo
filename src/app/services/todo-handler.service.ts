@@ -77,6 +77,10 @@ export class TodoHandlerService {
     return;
   }
 
+  async clearAll(){
+    await db.tasks.clear();
+  }
+
   constructor() {
   }
 }
